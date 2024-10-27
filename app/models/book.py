@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from app.db.database import Base
 
+from app.models.associations import book_tags, book_genres
+
 
 class Book(Base):
     __tablename__ = "books"
