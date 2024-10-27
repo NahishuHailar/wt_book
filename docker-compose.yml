@@ -1,0 +1,34 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: wt_user
+      POSTGRES_PASSWORD: wt_password
+      POSTGRES_DB: wt_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - wt_network
+
+  web:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://wt_user:wt_password@db/wt_db
+    depends_on:
+      - db
+    networks:
+      - wt_network
+
+networks:
+  wt_network:
+
+volumes:
+  postgres_data:
