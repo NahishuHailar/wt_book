@@ -1,2 +1,86 @@
-.env
+# Byte-compiled / optimized / DLL files
+__pycache__/
+**/*.py[cod]
+*$py.class
+
+# Virtual environment
 venv/
+.venv/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Pytest
+.cache/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Pyre type checker
+.pyre/
+
+# pyright type checker
+typings/
+
+# Pyenv
+.python-version
+
+# Mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# VSCode
+.vscode/
+
+# Docker
+docker-compose.override.yml
+docker-compose.override.yaml
+*.env.*
+!.env
+
+# SQLite
+*.sqlite3
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Test coverage
+.coverage
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+nosetests.xml
+test-report.xml
+
+# Logs
+logs/
+*.log
+*.out
+*.err
+
+# IDEs and Editors
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vscode/
+*.code-workspace
+
+# Mac
+.DS_Store

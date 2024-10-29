@@ -1,34 +1,31 @@
-# docker-compose.yml
-version: '3.8'
+version: "3.8"
+
+volumes:
+  pg_data:
 
 services:
   db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: wt_user
-      POSTGRES_PASSWORD: wt_password
-      POSTGRES_DB: wt_db
+    image: postgres:13
+    env_file: .env
+    ports:
+      - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - wt_network
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
 
-  web:
-    build: .
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    volumes:
-      - .:/app
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
     ports:
       - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql+asyncpg://wt_user:wt_password@db/wt_db
     depends_on:
-      - db
-    networks:
-      - wt_network
-
-networks:
-  wt_network:
-
-volumes:
-  postgres_data:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "alembic upgrade head && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000"

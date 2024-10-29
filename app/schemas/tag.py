@@ -1,21 +1,20 @@
-# app/schemas/tag.py
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from typing import Optional
 
-# Базовая схема для тега
+
 class TagBase(BaseModel):
     name: str
 
-# Схема для создания тега
+
 class TagCreate(TagBase):
-    pass
+    model_config = ConfigDict(from_attributes=True)
 
-# Схема для обновления тега
-class TagUpdate(TagBase):
-    pass
 
-# Схема для чтения тега
 class TagRead(TagBase):
     id: int
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        orm_mode = True
+
+class TagUpdate(BaseModel):
+    name: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)

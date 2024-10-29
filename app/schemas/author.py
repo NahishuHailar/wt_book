@@ -1,23 +1,23 @@
-from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from typing import Optional, List
 
-# Базовая схема для автора
+
 class AuthorBase(BaseModel):
     name: str
-    bio: Optional[str] = None
+    country: Optional[str] = None
 
-# Схема для создания автора
+
 class AuthorCreate(AuthorBase):
-    pass
+    model_config = ConfigDict(from_attributes=True)
 
-# Схема для обновления автора
-class AuthorUpdate(AuthorBase):
-    pass
 
-# Схема для чтения автора
 class AuthorRead(AuthorBase):
     id: int
-    books: List[str]  # Список названий книг
+    # tags: Optional[List[str]] = []
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        orm_mode = True
+
+class AuthorUpdate(BaseModel):
+    name: Optional[str] = None
+    country: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
