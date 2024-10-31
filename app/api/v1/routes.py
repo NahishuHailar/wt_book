@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+
 from app.api.v1.endpoints import authors, books, tags
 
 # Define the main API router with version prefix

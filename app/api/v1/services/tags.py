@@ -1,5 +1,6 @@
 from app.models.tag import Tag
 from app.schemas.tag import TagCreate, TagUpdate
+
 from .base_crud import CRUDBase
 
 

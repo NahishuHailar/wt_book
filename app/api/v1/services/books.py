@@ -1,7 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+
 from app.models.book import Book
 from app.schemas.book import BookCreate, BookUpdate
+
 from .base_crud import CRUDBase
 
 
@@ -13,7 +15,6 @@ class CRUDBook(CRUDBase[Book, BookCreate, BookUpdate]):
             select(Book).join(Book.tags).where(Book.tags.any(name=tag_name))
         )
         return result.scalars().all()
-
 
 
 # Instantiate the CRUD class for use in API routes

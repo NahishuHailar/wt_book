@@ -1,5 +1,5 @@
-from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy import Column, Integer
+from sqlalchemy.ext.declarative import as_declarative, declared_attr
 
 
 # Base class for all models, setting common attributes and table names

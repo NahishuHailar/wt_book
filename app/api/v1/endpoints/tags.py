@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.api.v1.services.tags import tag_crud
-from app.schemas.tag import TagCreate, TagUpdate, TagRead
+from app.schemas.tag import TagCreate, TagRead, TagUpdate
 from app.settings.db import db_handler
 
 router = APIRouter()

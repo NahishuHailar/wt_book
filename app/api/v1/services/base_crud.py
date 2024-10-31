@@ -1,8 +1,10 @@
-from typing import Type, TypeVar, Generic, Optional, List
+from typing import Generic, List, Optional, Type, TypeVar
+
+from fastapi.encoders import jsonable_encoder
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.exc import NoResultFound
-from fastapi.encoders import jsonable_encoder
+
 from app.models.base import Base
 
 # Type variables for model and schema types

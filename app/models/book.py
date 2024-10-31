@@ -1,5 +1,6 @@
-from sqlalchemy import Table, Column, Integer, ForeignKey, String
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy import Column, ForeignKey, Integer, String, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from app.models.base import Base
 
 book_tags = Table(

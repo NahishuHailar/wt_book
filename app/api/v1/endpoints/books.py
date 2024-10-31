@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.api.v1.services.books import book_crud
-from app.schemas.book import BookCreate, BookUpdate, BookRead
+from app.schemas.book import BookCreate, BookRead, BookUpdate
 from app.settings.db import db_handler
 
 router = APIRouter()
