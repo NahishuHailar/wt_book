@@ -1,13 +1,16 @@
-from sqlalchemy import Column, Integer
-from sqlalchemy.ext.declarative import as_declarative, declared_attr
+import uuid
+
+from sqlalchemy import UUID
+from sqlalchemy.orm import Mapped, mapped_column
 
 
-# Base class for all models, setting common attributes and table names
-@as_declarative()
+# Base class for all models, setting common attributes.
 class Base:
-    id = Column(Integer, primary_key=True, index=True)
+    __abstract__ = True
 
-    # Automatically generate table names based on class name
-    @declared_attr
-    def __tablename__(cls) -> str:
-        return f"{cls.__name__.lower()}s"
+    id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

@@ -1,3 +1,9 @@
 [flake8]
-max-line-length = 88
-exclude = venv, migrations, alembic
+max-line-length = 81
+exclude = venv, migrations, alembic, .git, __pycache__, conf.py
+
+
+# D1: Docstrings errors for missing docstrings (D100, D101, D102, D103, etc.)
+# D2: Docstrings errors for badly formatted docstrings (D200, D201, D202, etc.)
+# D4: Docstrings errors related to style (D400, D401, D402, etc.)
+ignore = D1, D2, D4

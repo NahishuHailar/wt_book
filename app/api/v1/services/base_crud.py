@@ -18,41 +18,48 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
 
     # Retrieve a single record by ID
-    async def get(self, db: AsyncSession, id: int) -> Optional[ModelType]:
-        result = await db.execute(select(self.model).where(self.model.id == id))
+    async def get(self, session: AsyncSession, id: int) -> Optional[ModelType]:
+        result = await session.execute(
+            select(self.model).where(self.model.id == id)
+        )
         return result.scalars().first()
 
     # Retrieve all records
-    async def get_all(self, db: AsyncSession) -> List[ModelType]:
-        result = await db.execute(select(self.model))
+    async def get_all(self, session: AsyncSession) -> List[ModelType]:
+        result = await session.execute(select(self.model))
         return result.scalars().all()
 
     # Create a new record
-    async def create(self, db: AsyncSession, obj_in: CreateSchemaType) -> ModelType:
+    async def create(
+        self, session: AsyncSession, obj_in: CreateSchemaType
+    ) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)  # Unpack dict to model fields
-        db.add(db_obj)
-        await db.commit()
-        await db.refresh(db_obj)
+        session.add(db_obj)
+        await session.commit()
+        await session.refresh(db_obj)
         return db_obj
 
     # Update an existing record
     async def update(
-        self, db: AsyncSession, db_obj: ModelType, obj_in: UpdateSchemaType
+        self,
+        session: AsyncSession,
+        db_obj: ModelType,
+        obj_in: UpdateSchemaType,
     ) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict(exclude_unset=True)
         for field in obj_data:
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
-        db.add(db_obj)
-        await db.commit()
-        await db.refresh(db_obj)
+        session.add(db_obj)
+        await session.commit()
+        await session.refresh(db_obj)
         return db_obj
 
     # Remove a record
-    async def remove(self, db: AsyncSession, id: int) -> ModelType:
-        obj = await self.get(db=db, id=id)
-        await db.delete(obj)
-        await db.commit()
+    async def remove(self, session: AsyncSession, id: int) -> ModelType:
+        obj = await self.get(session=session, id=id)
+        await session.delete(obj)
+        await session.commit()
         return obj

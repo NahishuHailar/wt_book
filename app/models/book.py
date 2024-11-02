@@ -1,4 +1,6 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Table
+import uuid
+
+from sqlalchemy import UUID, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
@@ -6,13 +8,21 @@ from app.models.base import Base
 book_tags = Table(
     "book_tags",
     Base.metadata,
-    Column("book_id", ForeignKey("books.id"), primary_key=True),
-    Column("tag_id", ForeignKey("tags.id"), primary_key=True),
+    mapped_column(
+        "id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    ),
+    mapped_column(
+        "book_id", UUID(as_uuid=True), ForeignKey("book.id"), nullable=False
+    ),
+    mapped_column(
+        "tag_id", UUID(as_uuid=True), ForeignKey("tag.id"), nullable=False
+    ),
 )
 
 
 class Book(Base):
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    __tablename__ = "book"
+
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     published_year: Mapped[int] = mapped_column(Integer, nullable=True)
 

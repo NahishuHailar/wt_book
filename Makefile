@@ -15,3 +15,14 @@ migrate:
 
 shell:
     docker-compose exec app bash
+
+lint:
+    flake8 .
+    black --check .
+    isort --check-only .
+
+black:
+    black .
+
+isort:
+    isort .

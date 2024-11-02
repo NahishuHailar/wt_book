@@ -1,5 +1,7 @@
+from typing import AsyncGenerator
+
 from pydantic_settings import BaseSettings
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 
 # Settings class to handle environment variables
@@ -26,23 +28,23 @@ class Settings(BaseSettings):
 # Instantiate settings
 settings = Settings()
 
-# Create the database engine with asyncpg
-engine = create_async_engine(settings.db_url, echo=settings.db_echo)
-
-# Create a session factory
-async_session = async_sessionmaker(bind=engine, expire_on_commit=False)
-
 
 # DB handler class for dependency injection in routes
-class DBHandler:
-    def __init__(self, engine):
-        self.engine = engine
-        self.session = async_sessionmaker(bind=engine)
+class Database:
+    def __init__(self, url: str, echo: bool):
+        self.engine = create_async_engine(url=url, echo=echo)
+        self.session_factory = async_sessionmaker(
+            bind=self.engine,
+            autoflush=False,
+            autocommit=False,
+            expire_on_commit=False,
+        )
 
-    async def get_db(self) -> AsyncSession:
-        async with self.session() as session:
+    async def scoped_session_dependency(self) -> AsyncGenerator:
+        async with self.session_factory() as session:
             yield session
+            await session.close()
 
 
 # Instantiate a handler for database operations
-db_handler = DBHandler(engine)
+db_handler = Database(settings.db_url, settings.db_echo)

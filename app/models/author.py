@@ -1,4 +1,6 @@
-from sqlalchemy import Column, ForeignKey, String, Table
+import uuid
+
+from sqlalchemy import UUID, ForeignKey, String, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
@@ -6,13 +8,24 @@ from app.models.base import Base
 author_tags = Table(
     "author_tags",
     Base.metadata,
-    Column("author_id", ForeignKey("authors.id"), primary_key=True),
-    Column("tag_id", ForeignKey("tags.id"), primary_key=True),
+    mapped_column(
+        "id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    ),
+    mapped_column(
+        "author_id",
+        UUID(as_uuid=True),
+        ForeignKey("author.id"),
+        nullable=False,
+    ),
+    mapped_column(
+        "tag_id", UUID(as_uuid=True), ForeignKey("tag.id"), nullable=False
+    ),
 )
 
 
 class Author(Base):
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    __tablename__ = "author"
+
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     country: Mapped[str] = mapped_column(String(100), nullable=True)
 
